@@ -65,6 +65,9 @@ public class DruidPooledConnection extends PoolableWrapper implements javax.sql.
     private volatile boolean                 traceEnable          = false;
     private boolean                          disable              = false;
     private boolean                          closed               = false;
+    /**
+     * 本次连接使用权的拥有线程
+     */
     private final Thread                     ownerThread;
     private long                             connectedTimeMillis;
     private long                             connectedTimeNano;
