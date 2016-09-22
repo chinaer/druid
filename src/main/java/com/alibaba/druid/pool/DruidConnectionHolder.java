@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
+ * 连接的包装对象
  * @author wenshao [szujobs@hotmail.com]
  */
 public final class DruidConnectionHolder {

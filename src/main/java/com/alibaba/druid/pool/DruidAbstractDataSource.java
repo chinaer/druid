@@ -716,6 +716,9 @@ public abstract class DruidAbstractDataSource extends WrapperAdapter implements 
         return removeAbandonedTimeoutMillis;
     }
 
+    /**
+     * 是否自动回收超时连接
+     */
     public boolean isRemoveAbandoned() {
         return removeAbandoned;
     }

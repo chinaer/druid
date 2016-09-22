@@ -33,7 +33,11 @@ import com.alibaba.druid.proxy.DruidDriver;
 import com.alibaba.druid.proxy.jdbc.StatementExecuteType;
 import com.alibaba.druid.util.JMXUtils;
 import com.alibaba.druid.util.Utils;
-
+/**
+ * 一条具体的sql相关统计信息
+ * @author geyingchao
+ *
+ */
 public final class JdbcSqlStat implements JdbcSqlStatMBean {
 
     private final String                                sql;

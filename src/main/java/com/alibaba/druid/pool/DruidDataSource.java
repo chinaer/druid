@@ -118,7 +118,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
     private long                             removeAbandonedCount    = 0L;
     private long                             notEmptyWaitCount       = 0L;
     private long                             notEmptySignalCount     = 0L;
-    private long                             notEmptyWaitNanos       = 0L;
+    private long                             notEmptyWaitNanos       = 0L; 
 
     /**
      * 最大活跃连接数
@@ -132,6 +132,9 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
     private long                             poolingPeakTime         = 0;
 
     // store
+    /**
+     * 连接数组，保存连接
+     */
     private volatile DruidConnectionHolder[] connections;
     private int                              poolingCount            = 0;
     private int                              activeCount             = 0;
@@ -160,6 +163,9 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
     private volatile boolean                 closed                  = false;
     private long                             closeTimeMillis         = -1L;
 
+    /**
+     * 当前数据源统计信息存放地方
+     */
     protected JdbcDataSourceStat             dataSourceStat;
 
     private boolean                          useGlobalDataSourceStat = false;
@@ -738,6 +744,9 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
         this.resetStatEnable = false;
     }
 
+    /**
+     * 连接销毁线程
+     */
     protected void createAndStartDestroyThread() {
         destroyTask = new DestroyTask();
 
@@ -757,6 +766,9 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
         destroyConnectionThread.start();
     }
 
+    /**
+     * 连接创建线程
+     */
     protected void createAndStartCreatorThread() {
         if (createScheduler == null) {
             String threadName = "Druid-ConnectionPool-Create-" + System.identityHashCode(this);
@@ -2260,6 +2272,9 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
         shrink(false);
     }
 
+    /**
+     * shrink n.收缩; 畏缩
+     */
     public void shrink(boolean checkTime) {
         final List<DruidConnectionHolder> evictList = new ArrayList<DruidConnectionHolder>();
         try {

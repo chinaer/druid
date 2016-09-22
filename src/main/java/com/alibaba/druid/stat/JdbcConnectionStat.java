@@ -34,6 +34,7 @@ import com.alibaba.druid.util.Histogram;
 import com.alibaba.druid.util.JMXUtils;
 
 /**
+ *connection对象相关的详细统计信息
  * @author wenshao [szujobs@hotmail.com]
  */
 public class JdbcConnectionStat implements JdbcConnectionStatMBean {
@@ -329,12 +330,35 @@ public class JdbcConnectionStat implements JdbcConnectionStatMBean {
         return transactionStartCount.get();
     }
 
+    /**
+     * 静态内部类
+     * 每条connection执行统计数据
+     * 保存每次连接的id,建立连接时间（establishTime），创建耗时（establishNano），使用时间（connectTime），使用耗时（connectTimespanNano），
+     * 使用异常堆栈（connectTimespanNano）、最后执行sql(lastSql)等信息
+     * @author geyingchao
+     *
+     */
     public static class Entry implements EntryMBean {
 
+    	/**
+    	 * 连接id
+    	 */
         private long         id;
+        /**
+         * 建立连接时间
+         */
         private long         establishTime;
+        /**
+         * 建立连接耗时
+         */
         private long         establishNano;
+        /**
+         * 使用连接的时间
+         */
         private Date         connectTime;
+        /**
+         * 连接使用耗时
+         */
         private long         connectTimespanNano;
         private Exception    connectStackTraceException;
 

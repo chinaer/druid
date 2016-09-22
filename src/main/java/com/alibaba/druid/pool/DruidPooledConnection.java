@@ -49,6 +49,7 @@ import com.alibaba.druid.support.logging.Log;
 import com.alibaba.druid.support.logging.LogFactory;
 
 /**
+ * connectionProxyImpl对象的包装对象
  * @author wenshao [szujobs@hotmail.com]
  */
 public class DruidPooledConnection extends PoolableWrapper implements javax.sql.PooledConnection, Connection {

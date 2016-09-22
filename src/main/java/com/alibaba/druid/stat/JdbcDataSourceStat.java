@@ -38,7 +38,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
+/**
+ * datasource对象相关统计信息
+ *
+ */
 public class JdbcDataSourceStat implements JdbcDataSourceStatMBean {
 
     private final static Log                                    LOG                     = LogFactory.getLog(JdbcDataSourceStat.class);
@@ -46,14 +49,26 @@ public class JdbcDataSourceStat implements JdbcDataSourceStatMBean {
     private final String                                        name;
     private final String                                        url;
     private String                                              dbType;
-
+    /**
+     * connection对象相关统计
+     */
     private final JdbcConnectionStat                            connectionStat          = new JdbcConnectionStat();
+    /**
+     * ResultSet对象相关统计
+     */
     private final JdbcResultSetStat                             resultSetStat           = new JdbcResultSetStat();
+    /**
+     * Statement对象相关统计
+     */
     private final JdbcStatementStat                             statementStat           = new JdbcStatementStat();
 
     private int                                                 maxSqlSize              = 1000;
 
     private ReentrantReadWriteLock                              lock                    = new ReentrantReadWriteLock();
+    
+    /**
+     * 所有sql统计信息map集合
+     */
     private final LinkedHashMap<String, JdbcSqlStat>            sqlStatMap;
 
     private final AtomicLong                                    skipSqlCount            = new AtomicLong();
@@ -64,7 +79,9 @@ public class JdbcDataSourceStat implements JdbcDataSourceStatMBean {
             100 * 1000, 1000 * 1000
                                                                                                         //
                                                                                                         });
-
+    /**
+     * 所有connection统计信息map集合
+     */
     private final ConcurrentMap<Long, JdbcConnectionStat.Entry> connections             = new ConcurrentHashMap<Long, JdbcConnectionStat.Entry>(
                                                                                                                                                 16,
                                                                                                                                                 0.75f,

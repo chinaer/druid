@@ -40,6 +40,7 @@ import java.util.Properties;
 import java.util.concurrent.Executor;
 
 /**
+ * druid  connection代理对象
  * @author wenshao [szujobs@hotmail.com]
  */
 public class ConnectionProxyImpl extends WrapperProxyImpl implements ConnectionProxy {
