@@ -124,10 +124,10 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
      * 最大活跃连接数
      */
     private int                              activePeak              = 0;
-    /**
-     * 连接活跃最大时间
+    /**连接活跃最大时间
      */
     private long                             activePeakTime          = 0;
+    /**连接池中峰值连接数*/
     private int                              poolingPeak             = 0;
     private long                             poolingPeakTime         = 0;
 
@@ -735,7 +735,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
             }
         }
     }
-
+    /**创建日志后台线程*/
     private void createAndLogThread() {
         if (this.timeBetweenLogStatsMillis <= 0) {
             return;

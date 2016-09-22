@@ -283,7 +283,7 @@ public abstract class DruidAbstractDataSource extends WrapperAdapter implements 
     private Boolean                                    useUnfairLock                             = null;
 
     private boolean                                    useLocalSessionState                      = true;
-
+    /**日志后台线程打印日志间隔时间*/
     protected long                                     timeBetweenLogStatsMillis;
     protected DruidDataSourceStatLogger                statLogger                                = new DruidDataSourceStatLoggerImpl();
     
