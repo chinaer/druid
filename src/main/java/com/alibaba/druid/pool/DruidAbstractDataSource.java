@@ -159,7 +159,7 @@ public abstract class DruidAbstractDataSource extends WrapperAdapter implements 
 
     protected List<Filter>                             filters                                   = new CopyOnWriteArrayList<Filter>();
     private boolean                                    clearFiltersEnable                        = true;
-    protected volatile ExceptionSorter                 exceptionSorter                           = null;
+    protected volatile ExceptionSorter                 exceptionSorter                           = null; //MySqlExceptionSorter
 
     protected Driver                                   driver;
 
@@ -218,7 +218,7 @@ public abstract class DruidAbstractDataSource extends WrapperAdapter implements 
 
     protected volatile long                            timeBetweenConnectErrorMillis             = DEFAULT_TIME_BETWEEN_CONNECT_ERROR_MILLIS;
 
-    protected volatile ValidConnectionChecker          validConnectionChecker                    = null;
+    protected volatile ValidConnectionChecker          validConnectionChecker                    = null;  //MySqlValidConnectionChecker
 
     protected final AtomicLong                         errorCount                                = new AtomicLong();
     protected final AtomicLong                         dupCloseCount                             = new AtomicLong();
@@ -270,10 +270,13 @@ public abstract class DruidAbstractDataSource extends WrapperAdapter implements 
 
     protected boolean                                  useOracleImplicitCache                    = true;
 
+    /**
+     * 是否为空的锁
+     */
     protected ReentrantLock                            lock;
     protected Condition                                notEmpty;
     protected Condition                                empty;
-
+    /**创建连接的数量*/
     protected AtomicLong                               createCount                               = new AtomicLong();
     protected AtomicLong                               destroyCount                              = new AtomicLong();
 
@@ -1456,7 +1459,7 @@ public abstract class DruidAbstractDataSource extends WrapperAdapter implements 
                                                                                                        throws SQLException;
 
     protected abstract void recycle(DruidPooledConnection pooledConnection) throws SQLException;
-
+    //创建数据库连接实际调用方法
     public Connection createPhysicalConnection(String url, Properties info) throws SQLException {
         Connection conn;
         if (getProxyFilters().size() == 0) {
@@ -1470,6 +1473,9 @@ public abstract class DruidAbstractDataSource extends WrapperAdapter implements 
         return conn;
     }
 
+    /**
+     * 创建物理数据库连接，connection
+     */
     public PhysicalConnectionInfo createPhysicalConnection() throws SQLException {
         String url = this.getUrl();
         Properties connectProperties = getConnectProperties();
@@ -1576,7 +1582,7 @@ public abstract class DruidAbstractDataSource extends WrapperAdapter implements 
     protected void setFailContinuous(boolean fail) {
         failContinuous.set(fail);
     }
-
+    /**每个物理连接的参数初始化设置*/
     public void initPhysicalConnection(Connection conn) throws SQLException {
         if (conn.getAutoCommit() != defaultAutoCommit) {
             conn.setAutoCommit(defaultAutoCommit);

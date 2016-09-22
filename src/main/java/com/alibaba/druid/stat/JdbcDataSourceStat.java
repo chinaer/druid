@@ -62,15 +62,21 @@ public class JdbcDataSourceStat implements JdbcDataSourceStatMBean {
      */
     private final JdbcStatementStat                             statementStat           = new JdbcStatementStat();
 
+    /**
+     * 最多纪录sql数据的统计
+     */
     private int                                                 maxSqlSize              = 1000;
 
     private ReentrantReadWriteLock                              lock                    = new ReentrantReadWriteLock();
     
     /**
-     * 所有sql统计信息map集合
+     * 所有sql统计信息map集合，按照插入顺序排序insertion-order，maxSqlSize决定最多放多少数据，skipSqlCount纪录忽略的条数
      */
     private final LinkedHashMap<String, JdbcSqlStat>            sqlStatMap;
 
+    /**
+     * 忽略的sql统计条数
+     */
     private final AtomicLong                                    skipSqlCount            = new AtomicLong();
 
     private final Histogram                                     connectionHoldHistogram = new Histogram(new long[] { //

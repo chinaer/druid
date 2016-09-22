@@ -136,6 +136,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
      * 连接数组，保存连接
      */
     private volatile DruidConnectionHolder[] connections;
+    /**当前连接池中拥有的物理连接资源数量*/
     private int                              poolingCount            = 0;
     private int                              activeCount             = 0;
     private long                             discardCount            = 0;
@@ -168,6 +169,9 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
      */
     protected JdbcDataSourceStat             dataSourceStat;
 
+    /**
+     * 是否使用全局数据源数据统计
+     */
     private boolean                          useGlobalDataSourceStat = false;
 
     private boolean                          mbeanRegistered         = false;
@@ -687,7 +691,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
             SQLException connectError = null;
 
             try {
-                // init connections
+                // init connections,开始创建物理数据库连接，并包装到DruidConnectionHolder对象中
                 for (int i = 0, size = getInitialSize(); i < size; ++i) {
                     PhysicalConnectionInfo pyConnectInfo = createPhysicalConnection();
                     DruidConnectionHolder holder = new DruidConnectionHolder(this, pyConnectInfo);
@@ -876,6 +880,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
         LOG.error(errorMessage + "validationQuery not set");
     }
 
+    
     protected void initCheck() throws SQLException {
         if (JdbcUtils.ORACLE.equals(this.dbType)) {
             isOracle = true;

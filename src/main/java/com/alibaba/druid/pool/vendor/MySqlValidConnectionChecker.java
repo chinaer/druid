@@ -30,7 +30,11 @@ import com.alibaba.druid.support.logging.Log;
 import com.alibaba.druid.support.logging.LogFactory;
 import com.alibaba.druid.util.JdbcUtils;
 import com.alibaba.druid.util.Utils;
-
+/**
+ * 针对mysql的连接检查，通过ping的方式
+ * @author geyingchao
+ *
+ */
 public class MySqlValidConnectionChecker extends ValidConnectionCheckerAdapter implements ValidConnectionChecker, Serializable {
 
     public static final int DEFAULT_VALIDATION_QUERY_TIMEOUT = 1000;
@@ -80,7 +84,7 @@ public class MySqlValidConnectionChecker extends ValidConnectionCheckerAdapter i
     public void setUsePingMethod(boolean usePingMethod) {
         this.usePingMethod = usePingMethod;
     }
-
+    /**验证mysql物理连接*/
     public boolean validConnection(Connection conn, String validateQuery, int validationQueryTimeout) throws Exception {
         if (conn.isClosed()) {
             return false;

@@ -27,8 +27,6 @@ public class TestDruid {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		execute();  
-		Thread.sleep(125000);
 		DruidPooledConnection conn=source.getConnection();
 		DruidPooledStatement statment=(DruidPooledStatement) conn.createStatement();
 		 ResultSet rs = statment.executeQuery("select * from people");

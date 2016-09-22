@@ -136,7 +136,9 @@ public class FilterChainImpl implements FilterChain {
 
         return wrapper.unwrap(iface);
     }
-
+    /**
+     * 创建数据库连接，通过这个filterchain计算出本次连接的统计信息
+     */
     public ConnectionProxy connection_connect(Properties info) throws SQLException {
         if (this.pos < filterSize) {
             return nextFilter().connection_connect(this, info);
