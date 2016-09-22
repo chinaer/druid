@@ -118,15 +118,33 @@ public abstract class DruidAbstractDataSource extends WrapperAdapter implements 
     protected volatile PasswordCallback                passwordCallback;
     protected volatile NameCallback                    userCallback;
 
+    /**
+     * 初始化的连接数
+     */
     protected volatile int                             initialSize                               = DEFAULT_INITIAL_SIZE;
     protected volatile int                             maxActive                                 = DEFAULT_MAX_ACTIVE_SIZE;
+    /**
+     * 最小空闲连接数
+     */
     protected volatile int                             minIdle                                   = DEFAULT_MIN_IDLE;
+    /**
+     * 最大空闲连接数
+     */
     protected volatile int                             maxIdle                                   = DEFAULT_MAX_IDLE;
+    /**
+     * 获取连接等待超时的时间
+     */
     protected volatile long                            maxWait                                   = DEFAULT_MAX_WAIT;
     protected int                                      notFullTimeoutRetryCount                  = 0;
 
+    /**
+     * sql验证语句
+     */
     protected volatile String                          validationQuery                           = DEFAULT_VALIDATION_QUERY;
     protected volatile int                             validationQueryTimeout                    = -1;
+    /**
+     * 在取出连接时进行有效验证
+     */
     private volatile boolean                           testOnBorrow                              = DEFAULT_TEST_ON_BORROW;
     private volatile boolean                           testOnReturn                              = DEFAULT_TEST_ON_RETURN;
     private volatile boolean                           testWhileIdle                             = DEFAULT_WHILE_IDLE;
@@ -156,19 +174,37 @@ public abstract class DruidAbstractDataSource extends WrapperAdapter implements 
 
     protected volatile boolean                         accessToUnderlyingConnectionAllowed       = true;
 
+    /**
+     * 连接检测的间隔时间，检测需要关闭的空闲连接，单位是毫秒
+     */
     protected volatile long                            timeBetweenEvictionRunsMillis             = DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS;
 
     protected volatile int                             numTestsPerEvictionRun                    = DEFAULT_NUM_TESTS_PER_EVICTION_RUN;
 
+    /**
+     * 连接在池中最小生存的时间，单位毫秒
+     */
     protected volatile long                            minEvictableIdleTimeMillis                = DEFAULT_MIN_EVICTABLE_IDLE_TIME_MILLIS;
+    /**
+     * 连接在池中最大生存的时间，单位毫秒
+     */
     protected volatile long                            maxEvictableIdleTimeMillis                = DEFAULT_MAX_EVICTABLE_IDLE_TIME_MILLIS;
 
     protected volatile long                            phyTimeoutMillis                          = DEFAULT_PHY_TIMEOUT_MILLIS;
 
+    /**
+     * 是否自动回收超时连接
+     */
     protected volatile boolean                         removeAbandoned;
 
+    /**
+     * 设置被遗弃的连接的超时的时间（以秒数为单位），即当一个连接被遗弃的时间超过设置的时间，则它会自动转换成可利用的连接。默认的超时时间是300秒
+     */
     protected volatile long                            removeAbandonedTimeoutMillis              = 300 * 1000;
 
+    /**
+     * 是否在自动回收超时连接的时候打印连接的超时错误
+     */
     protected volatile boolean                         logAbandoned;
 
     protected volatile int                             maxOpenPreparedStatements                 = -1;

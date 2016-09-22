@@ -108,6 +108,9 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
 
     // stats
     private final AtomicLong                 recycleErrorCount       = new AtomicLong();
+    /**
+     * 连接数
+     */
     private long                             connectCount            = 0L;
     private long                             closeCount              = 0L;
     private final AtomicLong                 connectErrorCount       = new AtomicLong();
@@ -117,7 +120,13 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
     private long                             notEmptySignalCount     = 0L;
     private long                             notEmptyWaitNanos       = 0L;
 
+    /**
+     * 最大活跃连接数
+     */
     private int                              activePeak              = 0;
+    /**
+     * 连接活跃最大时间
+     */
     private long                             activePeakTime          = 0;
     private int                              poolingPeak             = 0;
     private long                             poolingPeakTime         = 0;
@@ -1005,6 +1014,9 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
         throw new UnsupportedOperationException("Not supported by DruidDataSource");
     }
 
+    /**
+     * 真正获取连接的方法
+     */
     public DruidPooledConnection getConnectionDirect(long maxWaitMillis) throws SQLException {
         int notFullTimeoutRetryCnt = 0;
         for (;;) {
