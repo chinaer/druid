@@ -1726,7 +1726,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
 
         statLogger.log(statValue);
     }
-
+    /**log 后台线程，输出统计信息*/
     public DruidDataSourceStatValue getStatValueAndReset() {
         DruidDataSourceStatValue value = new DruidDataSourceStatValue();
 
