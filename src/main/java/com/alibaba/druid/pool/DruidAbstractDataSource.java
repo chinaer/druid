@@ -190,6 +190,9 @@ public abstract class DruidAbstractDataSource extends WrapperAdapter implements 
      */
     protected volatile long                            maxEvictableIdleTimeMillis                = DEFAULT_MAX_EVICTABLE_IDLE_TIME_MILLIS;
 
+    /**
+     * 数据库设置的物理连接超时时间
+     */
     protected volatile long                            phyTimeoutMillis                          = DEFAULT_PHY_TIMEOUT_MILLIS;
 
     /**
@@ -198,7 +201,7 @@ public abstract class DruidAbstractDataSource extends WrapperAdapter implements 
     protected volatile boolean                         removeAbandoned;
 
     /**
-     * 设置被遗弃的连接的超时的时间（以秒数为单位），即当一个连接被遗弃的时间超过设置的时间，则它会自动转换成可利用的连接。默认的超时时间是300秒
+     * 设置被遗弃的时间（以秒数为单位），如果某个连接从被连接到当前时间超过removeAbandonedTimeoutMillis，则无论是否被使用都被强制物理性的关闭掉
      */
     protected volatile long                            removeAbandonedTimeoutMillis              = 300 * 1000;
 

@@ -2273,6 +2273,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
     }
 
     /**
+     * 连接池大小收缩检测
      * shrink n.收缩; 畏缩
      */
     public void shrink(boolean checkTime) {
@@ -2291,6 +2292,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
 
                 if (checkTime) {
                     if (phyTimeoutMillis > 0) {
+                    	//physical connection connected time
                         long phyConnectTimeMillis = currentTimeMillis - connection.getTimeMillis();
                         if (phyConnectTimeMillis > phyTimeoutMillis) {
                             evictList.add(connection);
