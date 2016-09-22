@@ -28,7 +28,7 @@ import com.alibaba.druid.util.JdbcUtils;
  */
 public class ValidConnectionCheckerAdapter implements ValidConnectionChecker {
 
-    @Override
+    @Override /**统一的验证物理连接是否有效的方法*/
     public boolean isValidConnection(Connection conn, String query, int validationQueryTimeout) throws Exception {
         if (query == null || query.length() == 0) {
             return true;

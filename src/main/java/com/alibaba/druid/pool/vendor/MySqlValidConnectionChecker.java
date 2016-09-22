@@ -84,7 +84,7 @@ public class MySqlValidConnectionChecker extends ValidConnectionCheckerAdapter i
     public void setUsePingMethod(boolean usePingMethod) {
         this.usePingMethod = usePingMethod;
     }
-    /**验证mysql物理连接*/
+    /**验证mysql物理连接  init()的时候调用的是父类的isValidConnection*/
     public boolean validConnection(Connection conn, String validateQuery, int validationQueryTimeout) throws Exception {
         if (conn.isClosed()) {
             return false;
