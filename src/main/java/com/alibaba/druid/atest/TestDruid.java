@@ -43,6 +43,7 @@ public class TestDruid {
 		     System.out.println("| sex: " + sex);
 		   }
 		   conn.recycle();
+		   conn.close();
 	}
 	
 	
