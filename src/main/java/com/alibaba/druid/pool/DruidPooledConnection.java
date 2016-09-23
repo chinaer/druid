@@ -63,7 +63,7 @@ public class DruidPooledConnection extends PoolableWrapper implements javax.sql.
     protected TransactionInfo                transactionInfo;
     private final boolean                    dupCloseLogEnable;
     private volatile boolean                 traceEnable          = false;
-    private boolean                          disable              = false;
+    /**datasource是否可用*/private boolean                          disable              = false;
     private boolean                          closed               = false;
     /**
      * 本次连接使用权的拥有线程
@@ -235,7 +235,7 @@ public class DruidPooledConnection extends PoolableWrapper implements javax.sql.
         }
 
         DruidAbstractDataSource dataSource = holder.getDataSource();
-        boolean isSameThread = this.getOwnerThread() == Thread.currentThread();
+        boolean isSameThread = this.getOwnerThread() == Thread.currentThread(); 
         
         if (!isSameThread) {
             dataSource.setAsyncCloseConnectionEnable(true);

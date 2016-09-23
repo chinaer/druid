@@ -287,7 +287,7 @@ public abstract class DruidAbstractDataSource extends WrapperAdapter implements 
     /**日志后台线程打印日志间隔时间*/
     protected long                                     timeBetweenLogStatsMillis;
     protected DruidDataSourceStatLogger                statLogger                                = new DruidDataSourceStatLoggerImpl();
-    
+    /**是否允许非不同线程关闭连接*/
     private boolean                                    asyncCloseConnectionEnable                = false;
     protected int                                      maxCreateTaskCount                        = 3;
     protected boolean                                  failFast                                  = false;

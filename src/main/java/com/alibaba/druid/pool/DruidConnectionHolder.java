@@ -44,7 +44,7 @@ public final class DruidConnectionHolder {
 
     private final DruidAbstractDataSource       dataSource;
     private final Connection                    conn;
-    private final List<ConnectionEventListener> connectionEventListeners = new CopyOnWriteArrayList<ConnectionEventListener>();
+   /**每个connection对象所关联的listenner*/ private final List<ConnectionEventListener> connectionEventListeners = new CopyOnWriteArrayList<ConnectionEventListener>();
     private final List<StatementEventListener>  statementEventListeners  = new CopyOnWriteArrayList<StatementEventListener>();
     private final long                          connectTimeMillis;
     /**最近一次使用时间*/private transient long                      lastActiveTimeMillis;
@@ -226,7 +226,7 @@ public final class DruidConnectionHolder {
     public void incrementUseCount() {
         useCount++;
     }
-
+    /**将连接还回池中的时候将DruidConnectionHoler重置到初始状态*/
     public void reset() throws SQLException {
         // reset default settings
         if (underlyingReadOnly != defaultReadOnly) {

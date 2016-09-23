@@ -112,9 +112,9 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
      * 连接数(正在使用池连接的个数)
      */
     private long                             connectCount            = 0L;
-    private long                             closeCount              = 0L;
+   /**连接关闭操作统计，包括还回到池中*/ private long                             closeCount              = 0L;
     /**获取池对象失败次数*/private final AtomicLong                 connectErrorCount       = new AtomicLong();
-    private long                             recycleCount            = 0L;
+   /**回收的对象*/ private long                             recycleCount            = 0L;
     private long                             removeAbandonedCount    = 0L;
     private long                             notEmptyWaitCount       = 0L;
     private long                             notEmptySignalCount     = 0L;
@@ -1509,7 +1509,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
     public boolean isMbeanRegistered() {
         return mbeanRegistered;
     }
-
+    /**将DruidConnectionHolder 返回到连接池中的算法 */
     boolean putLast(DruidConnectionHolder e, long lastActiveTimeMillis) {
         if (poolingCount >= maxActive) {
             return false;
