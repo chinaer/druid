@@ -182,16 +182,16 @@ public abstract class DruidAbstractDataSource extends WrapperAdapter implements 
     protected volatile int                             numTestsPerEvictionRun                    = DEFAULT_NUM_TESTS_PER_EVICTION_RUN;
 
     /**
-     * 连接在池中最小生存的时间，单位毫秒
+     * 连接在池中最小空闲的时间，如果超时，根据最小空闲连接数判断是否关闭，单位毫秒
      */
     protected volatile long                            minEvictableIdleTimeMillis                = DEFAULT_MIN_EVICTABLE_IDLE_TIME_MILLIS;
     /**
-     * 连接在池中最大生存的时间，单位毫秒
+     * 连接在池中最大空闲时间，超时关闭，单位毫秒
      */
     protected volatile long                            maxEvictableIdleTimeMillis                = DEFAULT_MAX_EVICTABLE_IDLE_TIME_MILLIS;
 
     /**
-     * 数据库设置的物理连接超时时间
+     * 数据库设置的物理连接超时时间，也是连接在池中的最大存活时间
      */
     protected volatile long                            phyTimeoutMillis                          = DEFAULT_PHY_TIMEOUT_MILLIS;
 
@@ -201,6 +201,7 @@ public abstract class DruidAbstractDataSource extends WrapperAdapter implements 
     protected volatile boolean                         removeAbandoned;
 
     /**
+     * 对active连接判断
      * 设置被遗弃的时间（以秒数为单位），如果某个连接从被连接到当前时间超过removeAbandonedTimeoutMillis，则无论是否被使用都被强制物理性的关闭掉
      */
     protected volatile long                            removeAbandonedTimeoutMillis              = 300 * 1000;

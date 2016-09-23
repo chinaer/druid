@@ -21,6 +21,7 @@ public class TestDruid {
 		try {
 			loadPropertyFile(properties,TestDruid.class.getClassLoader());
 			source=(DruidDataSource) DruidDataSourceFactory.createDataSource(properties);
+			source.setTimeBetweenLogStatsMillis(30000);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

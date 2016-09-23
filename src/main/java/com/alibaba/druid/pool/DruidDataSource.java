@@ -2151,6 +2151,9 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
         }
     }
 
+    /**
+     * 对activeConnections 进行处理，如果(currrentNanos-connectedTimeNano)>removeAbandonedTimeoutMillis 移除
+     */
     public int removeAbandoned() {
         int removeCount = 0;
 
@@ -2279,6 +2282,11 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
 
     /**
      * 连接池大小收缩检测
+     * connections[]数组中的连接随着数组的增大，连接对象创建时间越晚
+     * 判断过程，从偏移量为0开始比较，如果连接的物理连接时间超过了phyTimeoutMillis设置的时间，表明该连接可能已经坏掉（超过数据库超时时间），移除
+     * 如果没有超过该时间设置，说明后面的都没有超过，然后判断它最近一次使用距离现在的时间，也就是空闲时间，如果空闲时间<minEvictableIdleTimeMillis,说明所有连接都是新的，终止判断
+     * 如果空闲时间>minEvictableIdleTimeMillis,而且需要移除的连接数量（poolingCount - minIdle）>偏移量，移除。如果小于偏移量，但是空闲时间大于maxEvictableIdleTimeMillis，也要移除。
+     * 最后将数组整体左移对齐，关闭abandon连接
      * shrink n.收缩; 畏缩
      */
     public void shrink(boolean checkTime) {
@@ -2297,14 +2305,14 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
 
                 if (checkTime) {
                     if (phyTimeoutMillis > 0) {
-                    	//physical connection connected time
+                    	/**physical connection connected time 如果实际连接超过了phyTimeoutMillis(数据库设置的超时连接时间)，可以判断该连接已经失效，可以关闭*/
                         long phyConnectTimeMillis = currentTimeMillis - connection.getTimeMillis();
                         if (phyConnectTimeMillis > phyTimeoutMillis) {
                             evictList.add(connection);
                             continue;
                         }
                     }
-
+                    /**如果空闲时间小于最小空闲时间，则连接保留*/
                     long idleMillis = currentTimeMillis - connection.getLastActiveTimeMillis();
 
                     if (idleMillis < minEvictableIdleTimeMillis) {
@@ -2313,7 +2321,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
 
                     if (checkTime && i < checkCount) {
                         evictList.add(connection);
-                    } else if (idleMillis > maxEvictableIdleTimeMillis) {
+                    } else if (idleMillis > maxEvictableIdleTimeMillis) { /**空闲时间大于最大空闲时间maxEvictableIdleTimeMillis，物理关闭连接*/
                         evictList.add(connection);
                     }
                 } else {
@@ -2334,7 +2342,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
         } finally {
             lock.unlock();
         }
-
+        /**释放掉，abandon的连接*/
         for (DruidConnectionHolder item : evictList) {
             Connection connection = item.getConnection();
             JdbcUtils.close(connection);
