@@ -47,9 +47,9 @@ public final class DruidConnectionHolder {
     private final List<ConnectionEventListener> connectionEventListeners = new CopyOnWriteArrayList<ConnectionEventListener>();
     private final List<StatementEventListener>  statementEventListeners  = new CopyOnWriteArrayList<StatementEventListener>();
     private final long                          connectTimeMillis;
-    private transient long                      lastActiveTimeMillis;
-    private long                                useCount                 = 0;
-    
+    /**最近一次使用时间*/private transient long                      lastActiveTimeMillis;
+    /**统计一个connection对象被使用的次数*/private long                                useCount                 = 0;
+    /**最近非空等待时间*/
     private long                                lastNotEmptyWaitNanos;
     
     private final long                          createNanoSpan;

@@ -825,7 +825,7 @@ public abstract class LogFilter extends FilterEventAdapter implements LogFilterM
         }
     }
 
-    @Override
+    @Override //log 获取connection事件
     public DruidPooledConnection dataSource_getConnection(FilterChain chain, DruidDataSource dataSource,
                                                           long maxWaitMillis) throws SQLException {
         DruidPooledConnection conn = chain.dataSource_connect(dataSource, maxWaitMillis);

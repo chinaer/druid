@@ -44,7 +44,7 @@ public final class JdbcStatManager implements JdbcStatManagerMBean {
     private final JdbcStatementStat           statementStat  = new JdbcStatementStat();
 
     private final AtomicLong                  resetCount     = new AtomicLong();
-
+    //和线程绑定的
     public final ThreadLocal<JdbcStatContext> contextLocal   = new ThreadLocal<JdbcStatContext>();
 
     private JdbcStatManager(){

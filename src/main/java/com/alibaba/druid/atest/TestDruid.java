@@ -41,7 +41,6 @@ public class TestDruid {
 		     System.out.print("| age: " + age);
 		     System.out.println("| sex: " + sex);
 		   }
-		   conn.recycle();
 		   conn.close();
 	}
 	

@@ -656,7 +656,7 @@ public class StatFilter extends FilterEventAdapter implements StatFilterMBean {
         StatFilterContext.getInstance().pool_connection_close(nanos);
     }
 
-    @Override
+    @Override //获取connection  连接
     public DruidPooledConnection dataSource_getConnection(FilterChain chain, DruidDataSource dataSource,
                                                           long maxWaitMillis) throws SQLException {
         DruidPooledConnection conn = chain.dataSource_connect(dataSource, maxWaitMillis);
@@ -664,7 +664,7 @@ public class StatFilter extends FilterEventAdapter implements StatFilterMBean {
         if (conn != null) {
             conn.setConnectedTimeNano();
 
-            StatFilterContext.getInstance().pool_connection_open();
+            StatFilterContext.getInstance().pool_connection_open();  //事件监听器模式，通知监听者
         }
 
         return conn;

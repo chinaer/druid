@@ -58,7 +58,7 @@ public class DruidPooledConnection extends PoolableWrapper implements javax.sql.
 
     public static final int                  MAX_RECORD_SQL_COUNT = 10;
 
-    protected Connection                     conn;
+   /**connectionProxyImpl对象*/ protected Connection                     conn;
     protected volatile DruidConnectionHolder holder;
     protected TransactionInfo                transactionInfo;
     private final boolean                    dupCloseLogEnable;
@@ -69,12 +69,12 @@ public class DruidPooledConnection extends PoolableWrapper implements javax.sql.
      * 本次连接使用权的拥有线程
      */
     private final Thread                     ownerThread;
-    private long                             connectedTimeMillis;
-    private long                             connectedTimeNano;
+   /**本次connection使用时间*/ private long                             connectedTimeMillis;
+   /**本次connection使用时间*/ private long                             connectedTimeNano;
     private volatile boolean                 running              = false;
 
     private volatile boolean                 abandoned            = false;
-
+    /**保存本次connection使用的堆栈信息*/
     private StackTraceElement[]              connectStackTrace;
 
     private Throwable                        disableError         = null;

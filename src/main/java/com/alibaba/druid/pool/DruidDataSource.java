@@ -109,11 +109,11 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
     // stats
     private final AtomicLong                 recycleErrorCount       = new AtomicLong();
     /**
-     * 连接数
+     * 连接数(正在使用池连接的个数)
      */
     private long                             connectCount            = 0L;
     private long                             closeCount              = 0L;
-    private final AtomicLong                 connectErrorCount       = new AtomicLong();
+    /**获取池对象失败次数*/private final AtomicLong                 connectErrorCount       = new AtomicLong();
     private long                             recycleCount            = 0L;
     private long                             removeAbandonedCount    = 0L;
     private long                             notEmptyWaitCount       = 0L;
@@ -124,7 +124,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
      * 最大活跃连接数
      */
     private int                              activePeak              = 0;
-    /**连接活跃最大时间
+    /**连接活跃峰值时的时间
      */
     private long                             activePeakTime          = 0;
     /**连接池中峰值连接数*/
@@ -138,7 +138,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
     private volatile DruidConnectionHolder[] connections;
     /**当前连接池中拥有的物理连接资源数量*/
     private int                              poolingCount            = 0;
-    private int                              activeCount             = 0;
+    /**正在使用connection的数量*/private int                              activeCount             = 0;
     private long                             discardCount            = 0;
     private int                              notEmptyWaitThreadCount = 0;
     private int                              notEmptyWaitThreadPeak  = 0;
@@ -160,7 +160,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
     private final AtomicLong                 resetCount              = new AtomicLong();
 
     private String                           initStackTrace;
-
+    /**标示datasource是否关闭*/
     private volatile boolean                 closed                  = false;
     private long                             closeTimeMillis         = -1L;
 
@@ -589,7 +589,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
 
             initStackTrace = Utils.toString(Thread.currentThread().getStackTrace());
 
-            this.id = DruidDriver.createDataSourceId();
+            this.id = DruidDriver.createDataSourceId(); //mysql 生成（Abandoned connection cleanup thread）
             if (this.id > 1) {
                 long delta = (this.id - 1) * 100000;
                 this.connectionIdSeed.addAndGet(delta);
@@ -712,7 +712,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
             createAndStartCreatorThread();
             createAndStartDestroyThread();
 
-            initedLatch.await();
+            initedLatch.await();  //等待start线程和destroy线程都启动了再继续init方法
             init = true;
 
             initedTime = new Date();
@@ -1032,7 +1032,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
     }
 
     /**
-     * 真正获取连接的方法
+     * 实际从池中获取connection对象
      */
     public DruidPooledConnection getConnectionDirect(long maxWaitMillis) throws SQLException {
         int notFullTimeoutRetryCnt = 0;
@@ -1113,7 +1113,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
     }
 
     /**
-     * 抛弃连接，不进行回收，而是抛弃
+     * 抛弃连接，直接关闭（经过连接测试，关闭坏掉的连接）
      * 
      * @param realConnection
      */
@@ -1132,7 +1132,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
             lock.unlock();
         }
     }
-
+    //获取池包装对象
     private DruidPooledConnection getConnectionInternal(long maxWait) throws SQLException {
         if (closed) {
             connectErrorCount.incrementAndGet();
@@ -1167,7 +1167,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
             connectCount++;
 
             if (maxWait > 0) {
-                holder = pollLast(nanos);
+                holder = pollLast(nanos);  //取出最后一个
             } else {
                 holder = takeLast();
             }
@@ -1567,7 +1567,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
 
         return last;
     }
-
+    /**从队列尾端取connection对象算法*/
     private DruidConnectionHolder pollLast(long nanos) throws InterruptedException, SQLException {
         long estimate = nanos;
 
@@ -1982,7 +1982,7 @@ public class DruidDataSource extends DruidAbstractDataSource implements DruidDat
         }
 
         public void run() {
-            initedLatch.countDown();
+            initedLatch.countDown();   
 
             int errorCount = 0;
             for (;;) {

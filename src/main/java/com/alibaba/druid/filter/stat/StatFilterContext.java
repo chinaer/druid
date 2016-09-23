@@ -17,7 +17,7 @@ package com.alibaba.druid.filter.stat;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
+/**statfilter  关联的上下文对象，主要目的在时间发生的时候通知listenner*/
 public class StatFilterContext {
 
     private List<StatFilterContextListener> listeners = new CopyOnWriteArrayList<StatFilterContextListener>();

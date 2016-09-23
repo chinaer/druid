@@ -132,10 +132,10 @@ public abstract class DruidAbstractDataSource extends WrapperAdapter implements 
      */
     protected volatile int                             maxIdle                                   = DEFAULT_MAX_IDLE;
     /**
-     * 获取连接等待超时的时间
+     * 获取连接等待超时的时间，从池中末端取（最新的）
      */
     protected volatile long                            maxWait                                   = DEFAULT_MAX_WAIT;
-    protected int                                      notFullTimeoutRetryCount                  = 0;
+    protected int                                      notFullTimeoutRetryCount                  = 0; //重试获取池中的连接
 
     /**
      * sql验证语句
@@ -175,7 +175,7 @@ public abstract class DruidAbstractDataSource extends WrapperAdapter implements 
     protected volatile boolean                         accessToUnderlyingConnectionAllowed       = true;
 
     /**
-     * 连接检测的间隔时间，检测需要关闭的空闲连接，单位是毫秒
+     * 获取连接时，当空闲时间大于这个值，取该连接用的时候就要检测连接的可用性
      */
     protected volatile long                            timeBetweenEvictionRunsMillis             = DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS;
 
@@ -1328,9 +1328,9 @@ public abstract class DruidAbstractDataSource extends WrapperAdapter implements 
             }
         }
     }
-
+    /**测试连接是否有效*/
     protected boolean testConnectionInternal(Connection conn) {
-        String sqlFile = JdbcSqlStat.getContextSqlFile();
+        String sqlFile = JdbcSqlStat.getContextSqlFile();  //取threadLocal 对象的值
         String sqlName = JdbcSqlStat.getContextSqlName();
 
         if (sqlFile != null) {

@@ -4542,7 +4542,7 @@ public class FilterChainImpl implements FilterChain {
             DruidPooledConnection conn = nextFilter().dataSource_getConnection(this, dataSource, maxWaitMillis);
             return conn;
         }
-
+        //开始调用datasouce的方法实际获取从池中获取connection对象
         return dataSource.getConnectionDirect(maxWaitMillis);
     }
 
