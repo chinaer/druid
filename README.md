@@ -1,3 +1,5 @@
+仅供个人学习druid源码之用，注释部分代码以防日后忘记
+
 # druid
 
 [![Build Status](https://travis-ci.org/alibaba/druid.svg?branch=master)](https://travis-ci.org/alibaba/druid)
